@@ -41,6 +41,8 @@ class Authbase {
    * @returns NextResponse or void based on authentication status.
    */
   async handleRequest(request: NextRequest): Promise<NextResponse | void> {
+    console.log("Received request (Authbase):", request.nextUrl.pathname);
+
     const path = request.nextUrl.pathname;
     const isPublicEndpoint = this.checkPublicEndpoint(path);
     const isPrivateEndpoint = this.checkPrivateEndpoint(path);
