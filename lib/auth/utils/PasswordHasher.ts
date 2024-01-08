@@ -1,8 +1,10 @@
+"use server";
+
 const bcrypt = require("bcrypt");
 
 const saltRounds = 12;
 
-async function hashPassword(password: string) {
+export async function hashPassword(password: string) {
   try {
     return await bcrypt.hash(password, saltRounds);
   } catch (err) {
@@ -11,7 +13,7 @@ async function hashPassword(password: string) {
   }
 }
 
-async function comparePassword(password: string, hash: string) {
+export async function comparePassword(password: string, hash: string) {
   try {
     return await bcrypt.compare(password, hash);
   } catch (err) {
@@ -19,5 +21,3 @@ async function comparePassword(password: string, hash: string) {
     throw err; // Rethrow the error for handling upstream
   }
 }
-
-export { hashPassword, comparePassword };

@@ -1,39 +1,50 @@
 import {
-  bigint,
   pgTable,
   text,
-  varchar,
   boolean,
   integer,
   timestamp,
-  smallint,
   uuid,
 } from "drizzle-orm/pg-core";
 
-export const users = pgTable("users", {
-  user_id: bigint("user_id", { mode: "bigint" }).primaryKey(),
-  email: varchar("email", { length: 255 }).unique().notNull(),
-  password_hash: text("password_hash").notNull(),
-  is_verified: boolean("is_verified").notNull().default(false),
-  failed_logins: integer("failed_logins").notNull().default(0),
-  last_failed_login: timestamp("last_failed_login"),
-  last_password_change: timestamp("last_password_change"),
+export const users = pgTable("user", {
+  id: uuid("id").notNull().primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  emailVerified: timestamp("emailVerified", { mode: "date" }),
+  password: text("password").notNull(),
+  createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
+  lastPasswordChange: timestamp("lastPasswordChange", { mode: "date" }),
 });
 
-export const userSessions = pgTable("user_sessions", {
-  session_id: uuid("session_id").primaryKey(),
-  user_id: bigint("user_id", { mode: "bigint" })
-    .references(() => users.user_id)
-    .notNull(),
-  session_active: boolean("session_active").notNull().default(true),
-  created_at: timestamp("created_at").notNull().defaultNow(),
-  expires_at: timestamp("expires_at").notNull(),
+export const sessions = pgTable("session", {
+  id: uuid("id").notNull().primaryKey(),
+  userId: uuid("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  accessToken: text("accessToken").notNull(),
+  refreshToken: text("refreshToken").notNull(),
+  expiresAt: timestamp("expiresAt", { mode: "date" }).notNull(),
+  createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
+  lastActive: timestamp("lastActive", { mode: "date" }).notNull(),
 });
 
-export const userVerifications = pgTable("user_verifications", {
-  user_id: bigint("user_id", { mode: "bigint" })
+export const verifications = pgTable("verification", {
+  userId: uuid("userId")
+    .notNull()
     .primaryKey()
-    .references(() => users.user_id),
-  verification_code: integer("verification_code"),
-  expires_at: timestamp("expires_at").notNull(),
+    .references(() => users.id, { onDelete: "cascade" }),
+  code: integer("code").notNull(),
+  expiresAt: timestamp("expiresAt", { mode: "date" }).notNull(),
+});
+
+export const passwordResets = pgTable("passwordReset", {
+  id: uuid("id").notNull().primaryKey(),
+  userId: uuid("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  token: text("token").notNull(),
+  createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
+  expiresAt: timestamp("expiresAt", { mode: "date" }).notNull(),
+  used: boolean("used").notNull().default(false),
 });
