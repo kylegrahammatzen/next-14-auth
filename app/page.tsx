@@ -1,40 +1,46 @@
 import Link from "next/link";
 
-export default function Home() {
+export default function Page() {
   return (
-    <>
-      <h1>Home</h1>
-      <p>
-        This is the home page. It is not protected. You can view this page
-        without being logged in.
-      </p>
-      <ul>
-        <h2 className="text-md font-semibold text-gray-900 my-4">Options</h2>
-        <li>
+    <div className="min-h-screen flex items-center">
+      <div className="sm:mx-auto sm:w-full max-w-md">
+        <h1 className="font-bold text-black">
+          Next 14 Email Authentication Kit
+        </h1>
+        <p className="mt-4">
+          With Next.js middleware, we can verify users before they access your
+          app.
+        </p>
+        <p className="mt-4">
+          User authentication tokens securely stored in the{" "}
+          <span className="text-pink-500">session</span> cookie.
+        </p>
+        <p className="mt-4">
+          Once authenticated, users can access the{" "}
           <Link
-            href="/auth/login"
-            className="text-red-600 hover:text-red-500 transition duration-150 ease-in-out"
+            href="/dashboard"
+            className={
+              "text-blue-600 hover:text-blue-500 transition duration-150 ease-in-out"
+            }
           >
-            Login
-          </Link>
-        </li>
-        <li>
+            /dashboard
+          </Link>{" "}
+          page.
+        </p>
+        <p className="mt-4">
+          To gain access to protected content, users must register and verify
+          their email.
+        </p>
+
+        <div className="mt-4">
           <Link
             href="/auth/register"
-            className="text-red-600 hover:text-red-500 transition duration-150 ease-in-out"
+            className="flex justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           >
             Register
           </Link>
-        </li>
-        <li>
-          <Link
-            href="/protected"
-            className="text-red-600 hover:text-red-500 transition duration-150 ease-in-out"
-          >
-            Protected Page
-          </Link>
-        </li>
-      </ul>
-    </>
+        </div>
+      </div>
+    </div>
   );
 }
